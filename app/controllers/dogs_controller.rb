@@ -4,7 +4,8 @@ class DogsController < ApplicationController
   # GET /dogs
   # GET /dogs.json
   def index
-    @dogs = Dog.all
+    binding.pry
+    @cats = Dog.all
   end
 
   # GET /dogs/1
