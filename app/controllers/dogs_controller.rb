@@ -43,13 +43,15 @@ class DogsController < ApplicationController
   # PATCH/PUT /dogs/1.json
   def update
     respond_to do |format|
-      if @dog.update(dog_params)
+      found =  Dog.find_by(user_id: dog_params[:user_id])
+      if  !found.nil?
+        @dog.update(dog_params)
         @dog.images.attach(params[:dog][:image]) if params[:dog][:image].present?
 
         format.html { redirect_to @dog, notice: 'Dog was successfully updated.' }
         format.json { render :show, status: :ok, location: @dog }
-      else
-        format.html { render :edit }
+        else
+        format.html { redirect_to @dog,  notice: 'You don\'t have access to update.' }
         format.json { render json: @dog.errors, status: :unprocessable_entity }
       end
     end
@@ -74,6 +76,6 @@ class DogsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def dog_params
-    params.require(:dog).permit(:name, :description, :images)
+    params.require(:dog).permit(:name, :description, :images, :user_id)
   end
 end
